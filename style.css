@@ -1,5 +1,5 @@
 :root {
-    --bg-light: #e2e2e2;
+    --bg-light: #5b8edf;
     --bg-dark: #283345;
     --text-light: #000;
     --text-dark: #fff;
@@ -222,12 +222,13 @@ button:hover {
 }
 
 .light-mode .button-num {
-    background-color: #afadad;
+    background-color: var(--bg-light);
     color: var(--text-light);
 }
 
 .light-mode .button-operator {
-    background-color: #afadad;
+    background-color: var(--bg-light);
+    color: #633f0a;
 }
   
 .light-mode button:hover {

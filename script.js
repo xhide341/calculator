@@ -61,18 +61,79 @@ toggleTheme(toggleThemeCheckbox.checked);
 // EVALUATE entire expression and
 // DISPLAY the result;
 
-function sum(num1, num2) {
-    return num1 + num2;
-}
+class Calculator {
+    constructor(displayElement) {
+        this.displayElement = displayElement;
+        this.currentOperand = '';
+        this.previousOperand = '';
+        this.operation = undefined;
+        this.updateDisplay();
+    }
 
-function subtract(num1, num2) {
-    return num1 - num2;
-}
+    clear() {
+        this.currentOperand = '';
+        this.previousOperand = '';
+        this.operation = '';
+        this.updateDisplay();
+    }
 
-function multiply(num1, num2) {
-    return num1 * num2;
-}
+    delete() {
+        this.currentOperand = this.currentOperand.toString().slice(0, -1);
+        this.updateDisplay();
+    }
 
-function divide(num1, num2) {
-    return num1 / num2;
+    appendNumber(number) {
+        if (number === '.' && this.currentOperand.includes('.')) return;
+        this.currentOperand = this.currentOperand.toString() + number.toString();
+        this.updateDisplay();
+    }
+
+    chooseOperation(operation) {
+        // if (this.currentOperand === '') return;
+        // if (operation === '+-') this.currentOperand = this.currentOperand * -1;
+        // if (this.previousOperand !== '') {
+            this.compute();
+        }
+        this.operation = operation;
+        this.previousOperand = this.currentOperand;
+        this.currentOperand = '';
+        this.updateDisplay();
+    }
+
+    compute() {
+        let computation;
+        const prev = parseFloat(this.previousOperand);
+        const current = parseFloat(this.currentOperand);
+        if (isNaN(prev) || isNaN(current)) return;
+        switch (this.operation) {
+            case '+':
+                computation = prev + current;
+                break;
+            case '-':
+                computation = prev - current;
+                break;
+            case '*':
+                computation = prev * current;
+                break;
+            case '/':
+                if (current === 0) {
+                    computation = "Error";
+                } else {
+                    computation = prev / current;
+                }
+                break;
+            case '+-':
+                computation = current * -1;
+                break;
+            case '%':
+                computation = prev % current;
+                break;
+            default:
+                return;
+        }
+        this.currentOperand = computation;
+        this.operation = undefined;
+        this.previousOperand = '';
+    }
+
 }
