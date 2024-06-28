@@ -88,17 +88,17 @@ class Calculator {
         this.updateDisplay();
     }
 
-    chooseOperation(operation) {
-        // if (this.currentOperand === '') return;
-        // if (operation === '+-') this.currentOperand = this.currentOperand * -1;
-        // if (this.previousOperand !== '') {
-            this.compute();
-        }
-        this.operation = operation;
-        this.previousOperand = this.currentOperand;
-        this.currentOperand = '';
-        this.updateDisplay();
-    }
+    // chooseOperation(operation) {
+    //     // if (this.currentOperand === '') return;
+    //     // if (operation === '+-') this.currentOperand = this.currentOperand * -1;
+    //     // if (this.previousOperand !== '') {
+    //         this.compute();
+    //     }
+    //     this.operation = operation;
+    //     this.previousOperand = this.currentOperand;
+    //     this.currentOperand = '';
+    //     this.updateDisplay();
+    // }
 
     compute() {
         let computation;
