@@ -1,0 +1,57 @@
+body {
+    background: burlywood;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.display-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    flex-grow: 1;
+    background: green;
+    margin-bottom: 20px;
+}
+
+.display-equation {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0;
+}
+
+.display-result {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 20px;
+    font-size: 64px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    width: 400px;
+    height: 600px;
+    background: lightblue;
+}
+
+button {
+    width: 100%;
+    height: 80px;
+    margin: 0;
+}
+
+.first-row,
+.second-row,
+.third-row,
+.fourth-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0;
+}
