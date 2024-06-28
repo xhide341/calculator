@@ -1,4 +1,4 @@
-// styling
+// Styling
 const body = document.body;
 const toggleThemeCheckbox = document.getElementById('toggle-theme');
 const displayScreen = document.querySelector('.display-screen');
@@ -34,60 +34,32 @@ const displayEquation = document.querySelector('.display-equation');
 const displayResult = document.querySelector('.display-result');
 
 
-function toggleButtonColors(isDarkMode) {
-  if (isDarkMode) {
-    numButtons.forEach(button => {
-        button.style.backgroundColor = '#283345';
-        button.style.color = '#fff';
-    });
-    operatorButtons.forEach(button => {
-        button.style.backgroundColor = '#283345'; // Adjust background color as needed
-    });
-  } else {
-    numButtons.forEach(button => {
-        button.style.backgroundColor = '#eee';
-        button.style.color = '#000'; 
-    });
-    operatorButtons.forEach(button => {
-        button.style.backgroundColor = '#eee'; // Adjust background color as needed
-    });
-  }
+function toggleTheme(isDarkMode) {
+    body.classList.toggle('dark-mode', isDarkMode);
+    body.classList.toggle('light-mode', !isDarkMode);
+    
+    sunIcon.style.display = isDarkMode ? 'none' : 'block';
+    moonIcon.style.display = isDarkMode ? 'block' : 'none';
+    
+    displayScreen.style.backgroundColor = isDarkMode ? 'var(--bg-dark)' : 'var(--bg-light)';
+    displayScreen.style.color = isDarkMode ? 'var(--text-dark)' : 'var(--text-light)';
 }
-
-function addHoverEffects(isDarkMode) {
-    button.forEach(button => {
-      if (isDarkMode) {
-        button.addEventListener('mouseover', () => button.style.backgroundColor = '#1d2838');
-        button.addEventListener('mouseout', () => button.style.backgroundColor = '#283345');
-      } else {
-        button.addEventListener('mouseover', () => button.style.backgroundColor = '#ddd');
-        button.addEventListener('mouseout', () => button.style.backgroundColor = '#eee');
-      }
-    });
-}
-
+  
 toggleThemeCheckbox.addEventListener('change', function() {
-  const isDarkMode = this.checked;
-
-  sunIcon.style.display = isDarkMode ? 'none' : 'block';
-  moonIcon.style.display = isDarkMode ? 'block' : 'none';
-  body.style.backgroundColor = isDarkMode ? '#283345' : '#eee';
-  displayScreen.style.backgroundColor = isDarkMode ? '#283345' : '#eee';
-  displayScreen.style.color = isDarkMode ? '#eee' : '#000';
-
-  toggleButtonColors(isDarkMode);
-  addHoverEffects(isDarkMode);
+    const isDarkMode = this.checked;
+    toggleTheme(isDarkMode);
 });
+  
+// Initial theme setup
+toggleTheme(toggleThemeCheckbox.checked);
 
 // WHEN a number is pressed,
-// ADD the number to display
+// ADD the number to displayValue + displayElement
 // WHEN an operator is pressed,
-// ADD the operator to display
+// ADD the operator to displayValue + displayElement
 // WHEN the equals button is pressed,
 // EVALUATE entire expression and
 // DISPLAY the result;
-
-
 
 function sum(num1, num2) {
     return num1 + num2;
