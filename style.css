@@ -108,6 +108,7 @@ body {
 }
 
 .label-theme svg.label-moon {
+    display: none;
     right: 12%;
     fill: #7e7e7e;
     color: #7e7e7e;
@@ -188,11 +189,13 @@ button {
     transition: all 0.3s ease;
     border: 1px solid grey;
     font-size: 28px;
+    position: relative;
 }
 
 button:hover {
-    background-color: #e0e0e0b6;
-    border-color: 2px solid black;
+    background: wheat;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
 }
 
 .first-row,
