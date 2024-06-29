@@ -1,34 +1,16 @@
-// Styling
+// theme elements
 const body = document.body;
 const toggleThemeCheckbox = document.getElementById('toggle-theme');
 const displayScreen = document.querySelector('.display-screen');
 const sunIcon = document.querySelector('.label-sun');
 const moonIcon = document.querySelector('.label-moon');
+// operations
 const button = document.querySelectorAll('button');
 const operatorButtons = document.querySelectorAll('.button-operator');
 const numButtons = document.querySelectorAll('.button-num');
-// Number buttons
-const button0 = document.querySelector('.button-0');
-const button1 = document.querySelector('.button-1');
-const button2 = document.querySelector('.button-2');
-const button3 = document.querySelector('.button-3');
-const button4 = document.querySelector('.button-4');
-const button5 = document.querySelector('.button-5');
-const button6 = document.querySelector('.button-6');
-const button7 = document.querySelector('.button-7');
-const button8 = document.querySelector('.button-8');
-const button9 = document.querySelector('.button-9');
-const buttonPeriod = document.querySelector('.button-period');
-const buttonAc = document.querySelector('.button-ac');
-// Operator buttons
-const buttonAC = document.querySelector('.button-ac');
-const buttonPlusMinus = document.querySelector('.button-plus-minus');
-const buttonPercentage = document.querySelector('.button-percentage');
-const buttonDivide = document.querySelector('.button-divide');
-const buttonMultiply = document.querySelector('.button-multiply');
-const buttonSubtract = document.querySelector('.button-subtract');
-const buttonAdd = document.querySelector('.button-add');
-const buttonEqual = document.querySelector('.button-equal');
+const equalButton = document.querySelector('.button-equal');
+const clearButton = document.querySelector('.button-ac');
+const plusMinusButton = document.querySelector('.button-plus-minus');
 // Display elements
 const displayEquation = document.querySelector('.display-equation');
 const displayResult = document.querySelector('.display-result');
@@ -50,55 +32,64 @@ toggleThemeCheckbox.addEventListener('change', function() {
     toggleTheme(isDarkMode);
 });
   
-// Initial theme setup
 toggleTheme(toggleThemeCheckbox.checked);
 
-// WHEN a number is pressed,
-// ADD the number to displayValue + displayElement
-// WHEN an operator is pressed,
-// ADD the operator to displayValue + displayElement
-// WHEN the equals button is pressed,
-// EVALUATE entire expression and
-// DISPLAY the result;
 
 class Calculator {
-    constructor(displayElement) {
-        this.displayElement = displayElement;
-        this.currentOperand = '';
-        this.previousOperand = '';
-        this.operation = undefined;
-        this.updateDisplay();
+    constructor(displayResultElement, displayEquationElement) {
+        this.displayResultElement = displayResultElement;
+        this.displayEquationElement = displayEquationElement;
+        this.clear();
     }
 
     clear() {
         this.currentOperand = '';
         this.previousOperand = '';
-        this.operation = '';
-        this.updateDisplay();
+        this.operation = undefined;
+        this.equation = '';
+        this.updateResultDisplay();
+        this.updateEquationDisplay();
     }
 
     delete() {
         this.currentOperand = this.currentOperand.toString().slice(0, -1);
-        this.updateDisplay();
+        this.updateResultDisplay();
     }
 
     appendNumber(number) {
         if (number === '.' && this.currentOperand.includes('.')) return;
         this.currentOperand = this.currentOperand.toString() + number.toString();
-        this.updateDisplay();
+        this.updateResultDisplay();
     }
 
-    // chooseOperation(operation) {
-    //     // if (this.currentOperand === '') return;
-    //     // if (operation === '+-') this.currentOperand = this.currentOperand * -1;
-    //     // if (this.previousOperand !== '') {
-    //         this.compute();
-    //     }
-    //     this.operation = operation;
-    //     this.previousOperand = this.currentOperand;
-    //     this.currentOperand = '';
-    //     this.updateDisplay();
-    // }
+    chooseOperation(operation) {
+        
+        if (operation === '+-') {
+            this.toggleSign();
+            operation = undefined;
+            return;
+        }
+
+        if (this.currentOperand === '') return;
+        if (this.previousOperand !== '') {
+            this.compute();
+        }
+
+        this.operation = operation;
+        this.previousOperand = this.currentOperand;
+        this.equation = `${this.currentOperand} ${this.operation}`;
+        this.currentOperand = '';
+        this.updateEquationDisplay();
+    }
+
+    toggleSign() {
+        if (this.currentOperand === '') return;
+        this.currentOperand = (parseFloat(this.currentOperand) * -1).toString();
+        this.equation = `negate(${this.currentOperand})`;
+        this.operation = undefined;
+        this.updateEquationDisplay();
+        this.updateResultDisplay();
+    }
 
     compute() {
         let computation;
@@ -122,18 +113,86 @@ class Calculator {
                     computation = prev / current;
                 }
                 break;
-            case '+-':
-                computation = current * -1;
-                break;
             case '%':
                 computation = prev % current;
                 break;
             default:
                 return;
         }
-        this.currentOperand = computation;
+        this.equation = `${this.previousOperand} ${this.operation} ${this.currentOperand} =`;
+        this.currentOperand = this.roundResult(computation);
         this.operation = undefined;
         this.previousOperand = '';
+        this.updateResultDisplay();
+        this.updateEquationDisplay();
     }
 
+    updateResultDisplay() {
+        this.displayResultElement.innerText = this.currentOperand;
+    }
+
+    updateEquationDisplay() {
+        this.displayEquationElement.innerText = this.equation;
+    }
+
+    roundResult(number) {
+        if (typeof number !== 'number') return number;
+        if (number.toString().includes('.') && number.toString().split('.')[1].length > 8) {
+            return Number(number.toFixed(8));
+        }
+        return number;
+    }
+
+    handleKeyboard(key) {
+        if (/[0-9.]/.test(key)) {
+            this.appendNumber(key);
+        } else if (['+', '-', '*', '/'].includes(key)) {
+            this.chooseOperation(key);
+        } else if (key === 'Enter' || key === '=') {
+            this.compute();
+        } else if (key === 'Backspace') {
+            this.delete();
+        } else if (key === 'Escape') {
+            this.clear();
+        }
+    }
 }
+
+const calculator = new Calculator(displayResult, displayEquation);
+
+numButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        calculator.appendNumber(button.innerText);
+    });
+});
+
+operatorButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        if (button.innerText === '×') {
+            calculator.chooseOperation('*');
+        }
+        if (button.innerText === '÷') {
+            calculator.chooseOperation('/');
+        }
+        if (button.innerText !== 'ac' && button.innerText !== '=' && button.innerText !== '&#x207a;&#x2044;&#x208b;') {
+            calculator.chooseOperation(button.innerText);
+        }
+    });
+});
+
+clearButton.addEventListener('click', () => {
+    calculator.clear();
+});
+
+equalButton.addEventListener('click', () => {
+    calculator.compute();
+});
+
+plusMinusButton.addEventListener('click', () => {
+    calculator.toggleSign();
+});
+
+document.addEventListener('keydown', function(event) {
+    calculator.handleKeyboard(event.key);
+});
+
