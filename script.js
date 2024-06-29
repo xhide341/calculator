@@ -62,11 +62,12 @@ class Calculator {
         this.updateResultDisplay();
     }
 
-    chooseOperation(operation) {
-        
+    chooseOperation(operation) {  
         if (operation === '+-') {
             this.toggleSign();
-            operation = undefined;
+            return;
+        } else if (operation === '%') {
+            this.calculatePercentage();
             return;
         }
 
@@ -80,8 +81,9 @@ class Calculator {
         this.equation = `${this.currentOperand} ${this.operation}`;
         this.currentOperand = '';
         this.updateEquationDisplay();
+        console.log(this.displayEquationElement.innerText);
     }
-
+    // for +- operation
     toggleSign() {
         if (this.currentOperand === '') return;
         this.currentOperand = (parseFloat(this.currentOperand) * -1).toString();
@@ -89,6 +91,23 @@ class Calculator {
         this.operation = undefined;
         this.updateEquationDisplay();
         this.updateResultDisplay();
+        console.log(this.currentOperand);
+    }
+    // for % operation
+    calculatePercentage() {
+        
+        if (this.previousOperand === '') {
+            // If there's no previous operand, just divide by 100
+            this.currentOperand = (parseFloat(this.currentOperand) / 100).toString();
+        } else {
+            // If there's a previous operand, calculate the percentage
+            const result = (parseFloat(this.previousOperand) * parseFloat(this.currentOperand)) / 100;
+            this.currentOperand = result.toString();
+        }
+        
+        this.equation = '';
+        this.updateResultDisplay();
+        this.updateEquationDisplay();
     }
 
     compute() {
@@ -112,9 +131,6 @@ class Calculator {
                 } else {
                     computation = prev / current;
                 }
-                break;
-            case '%':
-                computation = prev % current;
                 break;
             default:
                 return;
@@ -170,11 +186,11 @@ operatorButtons.forEach(button => {
     button.addEventListener('click', () => {
         if (button.innerText === '×') {
             calculator.chooseOperation('*');
-        }
-        if (button.innerText === '÷') {
+        } else if (button.innerText === '÷') {
             calculator.chooseOperation('/');
-        }
-        if (button.innerText !== 'ac' && button.innerText !== '=' && button.innerText !== '&#x207a;&#x2044;&#x208b;') {
+        } else if (button.innerText === '±') {
+            calculator.chooseOperation('+-');
+        } else if (button.innerText !== 'ac' && button.innerText !== '=' && button.innerText !== '±') {
             calculator.chooseOperation(button.innerText);
         }
     });
@@ -188,11 +204,6 @@ equalButton.addEventListener('click', () => {
     calculator.compute();
 });
 
-plusMinusButton.addEventListener('click', () => {
-    calculator.toggleSign();
-});
-
 document.addEventListener('keydown', function(event) {
     calculator.handleKeyboard(event.key);
 });
-
