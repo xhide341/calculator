@@ -56,9 +56,27 @@ class Calculator {
         this.updateResultDisplay();
     }
 
-    appendNumber(number) {
+   appendNumber(number) {
         if (number === '.' && this.currentOperand.includes('.')) return;
-        this.currentOperand = this.currentOperand.toString() + number.toString();
+        
+        let newOperand = this.currentOperand.toString() + number.toString();
+        
+        // Remove any non-digit characters (except the decimal point) for counting
+        let digitCount = newOperand.replace(/[^\d]/g, '').length;
+        
+        if (digitCount > 10) {
+            // If exceeding 10 digits, remove the first digit and append the new one
+            let parts = this.currentOperand.split('.');
+            if (parts[0].length > 0) {
+                parts[0] = parts[0].slice(1) + number;
+            } else if (parts.length > 1) {
+                parts[1] = parts[1].slice(1) + number;
+            }
+            this.currentOperand = parts.join('.');
+        } else {
+            this.currentOperand = newOperand;
+        }
+        
         this.updateResultDisplay();
     }
 
@@ -83,6 +101,7 @@ class Calculator {
         this.updateEquationDisplay();
         console.log(this.displayEquationElement.innerText);
     }
+
     // for +- operation
     toggleSign() {
         if (this.currentOperand === '') return;
@@ -95,16 +114,13 @@ class Calculator {
     }
     // for % operation
     calculatePercentage() {
-        
         if (this.previousOperand === '') {
-            // If there's no previous operand, just divide by 100
             this.currentOperand = (parseFloat(this.currentOperand) / 100).toString();
         } else {
-            // If there's a previous operand, calculate the percentage
             const result = (parseFloat(this.previousOperand) * parseFloat(this.currentOperand)) / 100;
             this.currentOperand = result.toString();
         }
-        
+
         this.equation = '';
         this.updateResultDisplay();
         this.updateEquationDisplay();
@@ -135,6 +151,7 @@ class Calculator {
             default:
                 return;
         }
+        
         this.equation = `${this.previousOperand} ${this.operation} ${this.currentOperand} =`;
         this.currentOperand = this.roundResult(computation);
         this.operation = undefined;
