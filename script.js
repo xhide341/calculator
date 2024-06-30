@@ -10,8 +10,7 @@ const operatorButtons = document.querySelectorAll('.button-operator');
 const numButtons = document.querySelectorAll('.button-num');
 const equalButton = document.querySelector('.button-equal');
 const clearButton = document.querySelector('.button-ac');
-const plusMinusButton = document.querySelector('.button-plus-minus');
-// Display elements
+// display elements
 const displayEquation = document.querySelector('.display-equation');
 const displayResult = document.querySelector('.display-result');
 
@@ -58,14 +57,11 @@ class Calculator {
 
    appendNumber(number) {
         if (number === '.' && this.currentOperand.includes('.')) return;
-        
+    
         let newOperand = this.currentOperand.toString() + number.toString();
-        
-        // Remove any non-digit characters (except the decimal point) for counting
         let digitCount = newOperand.replace(/[^\d]/g, '').length;
         
         if (digitCount > 10) {
-            // If exceeding 10 digits, remove the first digit and append the new one
             let parts = this.currentOperand.split('.');
             if (parts[0].length > 0) {
                 parts[0] = parts[0].slice(1) + number;
@@ -102,7 +98,6 @@ class Calculator {
         console.log(this.displayEquationElement.innerText);
     }
 
-    // for +- operation
     toggleSign() {
         if (this.currentOperand === '') return;
         this.currentOperand = (parseFloat(this.currentOperand) * -1).toString();
@@ -112,7 +107,7 @@ class Calculator {
         this.updateResultDisplay();
         console.log(this.currentOperand);
     }
-    // for % operation
+    
     calculatePercentage() {
         if (this.previousOperand === '') {
             this.currentOperand = (parseFloat(this.currentOperand) / 100).toString();
