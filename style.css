@@ -45,6 +45,7 @@ body {
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    overflow: hidden;
 }
 
 .display-screen {
@@ -52,6 +53,7 @@ body {
     background: #eee;
     flex-direction: column;
     justify-content: space-between;
+    text-align: right;
     gap: 16px;
     width: 100%;
     flex-grow: 1;
@@ -162,6 +164,10 @@ body {
     justify-content: flex-end;
     align-items: flex-end;
     margin: 0 20px;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .display-equation {

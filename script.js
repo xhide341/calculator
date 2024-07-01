@@ -156,11 +156,25 @@ class Calculator {
     }
 
     updateResultDisplay() {
-        this.displayResultElement.innerText = this.currentOperand;
+        let displayText = this.currentOperand.toString();
+        if (displayText.length > 10) {
+            displayText = displayText.slice(0, 10);
+        }
+        this.displayResultElement.innerText = displayText;
     }
 
     updateEquationDisplay() {
         this.displayEquationElement.innerText = this.equation;
+        this.adjustEquationFontSize();
+    }
+
+    adjustEquationFontSize() {
+        const equationLength = this.equation.length;
+        if (equationLength > 20) {
+            this.displayEquationElement.style.fontSize = '20px';
+        } else {
+            this.displayEquationElement.style.fontSize = '24px';
+        }
     }
 
     roundResult(number) {
