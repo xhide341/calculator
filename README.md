@@ -16,7 +16,7 @@ This project is about a basic calculator that emphasizes on UI/UX design. It off
 
 ### Features
 
-Here is a short summary for what the calculator does:
+Here is a short summary of what the calculator does:
 
 - This calculator can add, subtract, multiply, divide, along with percent conversion and negation.
 - This calculator only has a limit of 10 digit calculation since anything above that leads to the need of scientific notations to fit.
